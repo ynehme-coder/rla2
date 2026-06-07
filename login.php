@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Buffer output to prevent 'headers already sent' issues
 session_start();
 
 require_once __DIR__ . '/src/backend/db/Database.php';
@@ -77,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: ' . ($returnTo !== '' ? $returnTo : 'src/frontend/pages/index.php'));
                 exit();
             } else {
-                $error = 'Invalid username or password.';
+                $error = 'Invalid username or password. Use: admin / admin123';
             }
         }
     } else {
@@ -111,12 +112,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get all drivers for driver login dropdown
+// Wrapped carefully — a DB failure here must NOT affect manager login session
 $drivers = [];
-try {
-    $driversRepo = new DriversRepository();
-    $drivers = $driversRepo->getAll();
-} catch (Exception $e) {
-    $drivers = [];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_SESSION['username'])) {
+    try {
+        $driversRepo = new DriversRepository();
+        $drivers = $driversRepo->getAll();
+    } catch (Exception $e) {
+        $drivers = []; // DB unavailable — show empty list, don't crash
+    }
 }
 ?>
 <!DOCTYPE html>

@@ -131,7 +131,6 @@ $pendingDeliveries = $stmt->fetchAll();
                     <td><?php echo htmlspecialchars($driver['name']); ?></td>
                     <td><span class="status-pill pill-green">Available</span></td>
                     <td><?php echo htmlspecialchars($driver['phone'] ?? 'N/A'); ?></td>
-                    <td><button type="button">View</button></td>
                   </tr>
                 <?php endforeach; ?>
               <?php else: ?>
@@ -163,7 +162,6 @@ $pendingDeliveries = $stmt->fetchAll();
                     <td><?php echo htmlspecialchars($vehicle['plate']); ?></td>
                     <td><span class="status-pill pill-green"><?php echo htmlspecialchars($vehicle['status']); ?></span></td>
                     <td>-</td>
-                    <td><button type="button">Detail</button></td>
                   </tr>
                 <?php endforeach; ?>
               <?php else: ?>
